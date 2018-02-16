@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <script type="text/javascript">
+        // Let us open a web socket
+        var ws = new WebSocket("ws://localhost:9998");
+        ws.onopen = function () {
+            // Web Socket is connected, send data using send()
+            console.log("connected to server");
+        };
+        ws.onmessage = function (event) {
+            var ul = document.getElementById("list");
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(event.data));
+            ul.appendChild(li);
+        }
+        ws.onclose = function () {
+            console.log("disconnected")
+        }
+        function sendMessage(e) {
+            chatinput = document.getElementById('chatInput')
+            var keycode = (e.keyCode ? e.keyCode : e.which);
+            if (keycode == '13') {
+                ws.send(chatinput.value)
+                chatinput.value = ''
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <div>
+        <input class="form-control" id="chatInput" onkeypress="sendMessage(event)" placeholder="Enter chatroom name">
+        <ul id="list">
+        </ul>
+    </div>
+</body>
+
+</html>
